@@ -1,0 +1,10 @@
+<div class="container">
+  <input
+    type="file"
+    (change)="uploadImage($event)"
+    #upload
+    [style.display]="'none'"
+  />
+  <button (click)="upload.click()">Upload</button>
+  {{ imageName || "An image wasn't upload yet!" }}
+</div>
