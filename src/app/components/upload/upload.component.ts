@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { url } from 'inspector';
+import { UploadService } from 'src/app/services/upload.service';
 
 @Component({
   selector: 'app-upload',
@@ -7,17 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UploadComponent implements OnInit {
   public imageName!: string;
-  constructor() {}
+  public urlImage!: string;
+  constructor(private uploadService: UploadService) {}
 
   ngOnInit(): void {}
 
   uploadImage(event: any) {
     const file: File = event.target.files[0];
-    const formData = new FormData();
 
-    formData.append('beefamily', file);
-    this.imageName = file.name;
+    this.uploadService.upload(file);
+  }
 
-    console.log(file);
+  getImageUrl() {
+    this.uploadService.getUrl().then((url) => (this.urlImage = url));
   }
 }

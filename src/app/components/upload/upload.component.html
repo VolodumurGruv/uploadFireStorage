@@ -8,3 +8,8 @@
   <button (click)="upload.click()">Upload</button>
   {{ imageName || "An image wasn't upload yet!" }}
 </div>
+<div class="container">
+  <button (click)="getImageUrl()">Get image</button>
+
+  <img [src]="urlImage" />
+</div>
