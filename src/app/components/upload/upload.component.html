@@ -1,3 +1,6 @@
+<a class="btn" [routerLink]="['/images']" routerLinkActive="router-link-active"
+  >Show</a
+>
 <div class="container">
   <input
     type="file"
@@ -5,11 +8,6 @@
     #upload
     [style.display]="'none'"
   />
-  <button (click)="upload.click()">Upload</button>
-  {{ imageName || "An image wasn't upload yet!" }}
-</div>
-<div class="container">
-  <button (click)="getImageUrl()">Get image</button>
-
-  <img [src]="urlImage" />
+  <button class="btn" (click)="upload.click()">Upload</button>
+  <span> loaded: {{ loading$ | async }} </span>
 </div>

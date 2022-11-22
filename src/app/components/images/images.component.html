@@ -1,0 +1,12 @@
+<nav>
+  <a [routerLink]="['/']" class="btn" routerLinkActive="router-link-active"
+    >Upload</a
+  >
+  <button class="btn">Show</button>
+</nav>
+<div class="container">
+  <div class="card" *ngFor="let url of urlImages | async">
+    <img [src]="url.imageUrl" />
+    <button (click)="deleteImage(url.id, url.imageUrl)">Del</button>
+  </div>
+</div>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { url } from 'inspector';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import { UploadService } from 'src/app/services/upload.service';
 
 @Component({
@@ -7,20 +8,11 @@ import { UploadService } from 'src/app/services/upload.service';
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss'],
 })
-export class UploadComponent implements OnInit {
-  public imageName!: string;
-  public urlImage!: string;
+export class UploadComponent {
+  loading$!: Observable<number | undefined>;
   constructor(private uploadService: UploadService) {}
 
-  ngOnInit(): void {}
-
-  uploadImage(event: any) {
-    const file: File = event.target.files[0];
-
-    this.uploadService.upload(file);
-  }
-
-  getImageUrl() {
-    this.uploadService.getUrl().then((url) => (this.urlImage = url));
+  uploadImage(event: any): void {
+    this.loading$ = this.uploadService.upload(event);
   }
 }

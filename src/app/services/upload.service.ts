@@ -1,26 +1,41 @@
 import { Injectable } from '@angular/core';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import { initializeApp } from 'firebase/app';
-import { environment } from 'src/environments/environment.prod';
+
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { finalize, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UploadService {
-  upload(file: any) {
-    initializeApp(environment.firebase);
-    const storage = getStorage();
-    const imageRef = ref(storage, `befamily/${file.name}`);
+  constructor(
+    private storage: AngularFireStorage,
+    private store: AngularFirestore
+  ) {}
 
-    uploadBytes(imageRef, file).then((snapshot) => {
-      console.log('Image was uploaded');
-    });
+  upload(event: any): Observable<number | undefined> {
+    const file = event.target.files[0];
+    const filePath = `images/${file.name}`;
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+
+    task
+      .snapshotChanges()
+      .pipe(
+        finalize(() =>
+          fileRef
+            .getDownloadURL()
+            .subscribe((a) =>
+              this.store.collection('imageUrls/').add({ imageUrl: a })
+            )
+        )
+      )
+      .subscribe();
+
+    return task.percentageChanges();
   }
 
-  getUrl(): Promise<any> {
-    initializeApp(environment.firebase);
-    const storage = getStorage();
-
-    return getDownloadURL(ref(storage, 'befamily/369.png'));
+  deleteImage(url: string): void {
+    this.storage.storage.refFromURL(url).delete();
   }
 }
