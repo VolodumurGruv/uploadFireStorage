@@ -6,7 +6,7 @@
 </nav>
 <div class="container">
   <div class="card" *ngFor="let url of urlImages | async">
-    <img [src]="url.imageUrl" />
+    <img [src]="url.imageUrl" (click)="getAll(url.imageUrl)" />
     <button (click)="deleteImage(url.id, url.imageUrl)">Del</button>
   </div>
 </div>

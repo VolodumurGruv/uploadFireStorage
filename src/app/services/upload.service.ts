@@ -13,6 +13,25 @@ export class UploadService {
     private store: AngularFirestore
   ) {}
 
+  getAll(url: string) {
+    //get all full path from storage
+    const mapUrls: any = [];
+    this.storage.storage
+      .ref('images/')
+      .listAll()
+      .then((b: any) =>
+        b.items.forEach((i: any) =>
+          //i.name get file's name
+          //i.fullPath get path (images/)and file's name
+          {
+            i.getDownloadURL().then((b: any) => {
+              mapUrls.push(b);
+            });
+          }
+        )
+      );
+  }
+
   upload(event: any): Observable<number | undefined> {
     const file = event.target.files[0];
     const filePath = `images/${file.name}`;
